@@ -2,10 +2,10 @@
 layout: post
 title: Enhancing Targeting Accuracy Using ML
 image: "/posts/classification-title-img.png"
-tags: [Customer Targeting, Machine Learning, Classification, Python]
+tags: [Machine Learning, Logistic Regression, Decision Tree, Random Forest, KNN, Classification, Python]
 ---
 
-Our client, a grocery retailer, wants to utilise Machine Learning to reduce mailing costs, and improve ROI!
+Our client, a grocery retailer, wants to utilize Machine Learning to reduce mailing costs and improve its ROI!
 
 # Table of contents
 
@@ -30,9 +30,9 @@ ___
 
 ### Context <a name="overview-context"></a>
 
-Our client, a grocery retailer, sent out mailers in a marketing campaign for their new *delivery club*.  This cost customers $100 per year for membership, and offered free grocery deliveries, rather than the normal cost of $10 per delivery.
+Our client, a grocery retailer, sent out mailers in a marketing campaign for their new *delivery club*. This program cost customers $100 per year for membership, and offered free grocery deliveries, rather than the normal cost of $10 per delivery.
 
-For this, they sent mailers to their entire customer base (apart from a control group) but this proved expensive.  For the next batch of communications they would like to save costs by *only* mailing customers that were likely to sign up.
+For this, they sent mailers to their entire customer base (apart from a control group), but this proved expensive. For the next batch of communications, they would like to save costs by *only* mailing customers who are likely to sign up.
 
 Based upon the results of the last campaign and the customer data available, we will look to understand the *probability* of customers signing up for the *delivery club*.  This would allow the client to mail a more targeted selection of customers, lowering costs, and improving ROI.
 
@@ -41,26 +41,26 @@ Let's use Machine Learning to take on this task!
 <br>
 ### Actions <a name="overview-actions"></a>
 
-We firstly needed to compile the necessary data from tables in the database, gathering key customer metrics that may help predict *delivery club* membership.
+We first need to compile the necessary data from tables in the database, gathering key customer metrics that may help predict *delivery club* membership.
 
-Within our historical dataset from the last campaign, we found that 69% of customers did not sign up and 31% did.  This tells us that while the data isn't perfectly balanced at 50:50, it isn't *too* imbalanced either.  Even so, we make sure to not rely on classification accuracy alone when assessing results - also analysing Precision, Recall, and F1-Score.
+Within our historical dataset from the last campaign, we found that 69% of customers did not sign up and 31% did. This tells us that while the data isn't perfectly balanced at 50:50, it isn't *too* imbalanced either. Even so, we make sure to not rely on classification accuracy alone when assessing results - rather, we also analyze Precision, Recall, and F1-Score.
 
-As we are predicting a binary output, we tested four classification modelling approaches, namely:
+As we are predicting a binary output, we test four classification modelling approaches, namely:
 
 * Logistic Regression
 * Decision Tree
 * Random Forest
 * K Nearest Neighbours (KNN)
 
-For each model, we will import the data in the same way but will need to pre-process the data based up the requirements of each particular algorithm.  We will train & test each model, look to refine each to provide optimal performance, and then measure this predictive performance based on several metrics to give a well-rounded overview of which is best.
+For each model, we will import the data in the same way, but will need to pre-process the data based up the requirements of each particular algorithm. We will train & test each model, look to refine each to provide optimal performance, and then measure this predictive performance based on several metrics to give a well-rounded overview of which is best.
 <br>
 <br>
 
 ### Results <a name="overview-results"></a>
 
-The goal for the project was to build a model that would accurately predict the customers that would sign up for the *delivery club*.  This would allow for a much more targeted approach when running the next iteration of the campaign.  A secondary goal was to understand what the drivers for this are, so the client can get closer to the customers that need or want this service, and enhance their messaging.
+The goal for the project is to build a model that accurately predicts the customers that would sign up for the *delivery club*. This would allow for a much more targeted approach when running the next iteration of the campaign. A secondary goal is to understand what the drivers for this are, so the client can get closer to the customers that need or want this service and enhance their messaging.
 
-Based upon these, the chosen the model is the Random Forest as it was a) the most consistently performant on the test set across classication accuracy, precision, recall, and f1-score, and b) the feature importance and permutation importance allows the client an understanding of the key drivers behind *delivery club* signups.
+Based upon these, the chosen model is the Random Forest, as it is a) the best performer on the test set across classication accuracy, precision, recall, and f1-score, and b) the feature importance and permutation importance allows the client an understanding of the key drivers behind *delivery club* sign ups.
 
 <br>
 **Metric 1: Classification Accuracy**
@@ -97,7 +97,7 @@ Based upon these, the chosen the model is the Random Forest as it was a) the mos
 <br>
 ### Growth/Next Steps <a name="overview-growth"></a>
 
-While predictive accuracy was relatively high - other modelling approaches could be tested, especially those somewhat similar to Random Forest, for example XGBoost, LightGBM to see if even more accuracy could be gained.
+While predictive accuracy is relatively high, other modelling approaches could be tested, especially those somewhat similar to Random Forest (for example XGBoost, LightGBM) - to see if even more accuracy could be gained.
 
 From a data point of view, further variables could be collected, and further feature engineering could be undertaken to ensure that we have as much useful information available for predicting customer loyalty
 <br>
@@ -108,9 +108,9 @@ ___
 
 We will be predicting the binary *signup_flag* metric from the *campaign_data* table in the client database.
 
-The key variables hypothesised to predict this will come from the client database, namely the *transactions* table, the *customer_details* table, and the *product_areas* table.
+The key variables hypothesized to predict this will come from the client database, namely the *transactions* table, the *customer_details* table, and the *product_areas* table.
 
-We aggregated up customer data from the 3 months prior to the last campaign.
+We aggregate up customer data from the three months prior to the last campaign.
 
 After this data pre-processing in Python, we have a dataset for modelling that contains the following fields...
 <br>
@@ -119,23 +119,23 @@ After this data pre-processing in Python, we have a dataset for modelling that c
 | **Variable Name** | **Variable Type** | **Description** |
 |---|---|---|
 | signup_flag | Dependent | A binary variable showing if the customer signed up for the delivery club in the last campaign |
-| distance_from_store | Independent | The distance in miles from the customers home address, and the store |
+| distance_from_store | Independent | The distance in miles from the customer's home address to the store |
 | gender | Independent | The gender provided by the customer |
-| credit_score | Independent | The customers most recent credit score |
-| total_sales | Independent | Total spend by the customer in ABC Grocery - 3 months pre campaign |
-| total_items | Independent | Total products purchased by the customer in ABC Grocery - 3 months pre campaign |
-| transaction_count | Independent | Total unique transactions made by the customer in ABC Grocery - 3 months pre campaign |
-| product_area_count | Independent | The number of product areas within ABC Grocery the customers has shopped into - 3 months pre campaign |
-| average_basket_value | Independent | The average spend per transaction for the customer in ABC Grocery - 3 months pre campaign |
+| credit_score | Independent | The customer's most recent credit score |
+| total_sales | Independent | Total spend by the customer in ABC Grocery - 3 months pre-campaign |
+| total_items | Independent | Total products purchased by the customer in ABC Grocery - 3 months pre-campaign |
+| transaction_count | Independent | Total unique transactions made by the customer in ABC Grocery - 3 months pre-campaign |
+| product_area_count | Independent | The number of product areas within ABC Grocery in which the customer has purchased any items - 3 months pre-campaign |
+| average_basket_value | Independent | The average spend per transaction for the customer in ABC Grocery - 3 months pre-campaign |
 
 <br>
 # Modelling Overview  <a name="modelling-overview"></a>
 
 We will build a model that looks to accurately predict *signup_flag*, based upon the customer metrics listed above.
 
-If that can be achieved, we can use this model to predict signup & signup probability for future campaigns.  This information can be used to target those more likely to sign-up, reducing marketing costs and thus increasing ROI.
+If that can be achieved, we can use this model to predict sign-up & sign-up probability for future campaigns. This information can be used to target those more likely to sign up, reducing marketing costs and thus increasing ROI.
 
-As we are predicting a binary output, we tested three classification modelling approaches, namely:
+As we are predicting a binary output, we test three classification modelling approaches, namely:
 
 * Logistic Regression
 * Decision Tree
@@ -144,7 +144,7 @@ As we are predicting a binary output, we tested three classification modelling a
 <br>
 # Logistic Regression <a name="logreg-title"></a>
 
-We utlise the scikit-learn library within Python to model our data using Logistic Regression. The code sections below are broken up into 5 key sections:
+We utilize the scikit-learn library within Python to model our data using Logistic Regression. The code sections below are broken up into 5 key sections:
 
 * Data Import
 * Data Preprocessing
@@ -155,7 +155,7 @@ We utlise the scikit-learn library within Python to model our data using Logisti
 <br>
 ### Data Import <a name="logreg-import"></a>
 
-Since we saved our modelling data as a pickle file, we import it.  We ensure we remove the id column, and we also ensure our data is shuffled.
+Since we saved our modelling data as a pickle file, we import it. We ensure we remove the id column, and we also ensure our data is shuffled.
 
 We also investigate the class balance of our dependent variable - which is important when assessing classification accuracy.
 
@@ -184,15 +184,14 @@ data_for_model = shuffle(data_for_model, random_state = 42)
 
 # assess class balance of dependent variable
 data_for_model["signup_flag"].value_counts(normalize = True)
-
 ```
 <br>
-From the last step in the above code, we see that **69% of customers did not sign up and 31% did**.  This tells us that while the data isn't perfectly balanced at 50:50, it isn't *too* imbalanced either.  Because of this, and as you will see, we make sure to not rely on classification accuracy alone when assessing results - also analysing Precision, Recall, and F1-Score.
+From the last step in the above code, we see that **69% of customers did not sign up and 31% did**.  This tells us that while the data isn't perfectly balanced at 50:50, it isn't *too* imbalanced either.  Because of this, and as you will see, we make sure to not rely on classification accuracy alone when assessing results - rather, we also analyze Precision, Recall, and F1-Score.
 
 <br>
 ### Data Preprocessing <a name="logreg-preprocessing"></a>
 
-For Logistic Regression we have certain data preprocessing steps that need to be addressed, including:
+For Logistic Regression, we have certain data preprocessing steps that need to be addressed, including:
 
 * Missing values in the data
 * The effect of outliers
@@ -202,22 +201,21 @@ For Logistic Regression we have certain data preprocessing steps that need to be
 <br>
 ##### Missing Values
 
-The number of missing values in the data was extremely low, so instead of applying any imputation (i.e. mean, most common value) we will just remove those rows
+The number of missing values in the data was extremely low, so instead of applying any imputation (i.e. mean, most common value) we will just remove those rows.
 
 ```python
 
 # remove rows where values are missing
 data_for_model.isna().sum()
 data_for_model.dropna(how = "any", inplace = True)
-
 ```
 
 <br>
 ##### Outliers
 
-The ability for a Logistic Regression model to generalise well across *all* data can be hampered if there are outliers present.  There is no right or wrong way to deal with outliers, but it is always something worth very careful consideration - just because a value is high or low, does not necessarily mean it should not be there!
+The ability for a Logistic Regression model to generalize well across *all* data can be hampered if there are outliers present. There is no right or wrong way to deal with outliers, but it is always something worth very careful consideration - just because a value is high or low does not necessarily mean it should not be there!
 
-In this code section, we use **.describe()** from Pandas to investigate the spread of values for each of our predictors.  The results of this can be seen in the table below.
+In this code section, we use **.describe()** from Pandas to investigate the spread of values for each of our predictors. The results of this can be seen in the table below:
 
 <br>
 
@@ -232,13 +230,13 @@ In this code section, we use **.describe()** from Pandas to investigate the spre
 | max | 400.97 | 0.88 | 7372.06 | 910.00 | 75.00 | 5.00 | 141.05  |
 
 <br>
-Based on this investigation, we see some *max* column values for several variables to be much higher than the *median* value.
+Based on this investigation, we see some *max* column values for several variables are much higher than the *median* value.
 
-This is for columns *distance_from_store*, *total_sales*, and *total_items*
+This is for columns *distance_from_store*, *total_sales*, and *total_items*.
 
 For example, the median *distance_to_store* is 1.64 miles, but the maximum is over 400 miles!
 
-Because of this, we apply some outlier removal in order to facilitate generalisation across the full dataset.
+Because of this, we apply some outlier removal in order to facilitate generalization across the full dataset.
 
 We do this using the "boxplot approach" where we remove any rows where the values within those columns are outside of the interquartile range multiplied by 2.
 
@@ -262,15 +260,14 @@ for column in outlier_columns:
     print(f"{len(outliers)} outliers detected in column {column}")
     
     data_for_model.drop(outliers, inplace = True)
-
 ```
 
 <br>
 ##### Split Out Data For Modelling
 
-In the next code block we do two things, we firstly split our data into an **X** object which contains only the predictor variables, and a **y** object that contains only our dependent variable.
+In the next code block, we do two things: 1) split our data into an **X** object which contains only the predictor variables, and a **y** object that contains only our dependent variable; then 2) split our data into training and test sets to ensure we can fairly validate the accuracy of the predictions on data that was not used in training.
 
-Once we have done this, we split our data into training and test sets to ensure we can fairly validate the accuracy of the predictions on data that was not used in training.  In this case, we have allocated 80% of the data for training, and the remaining 20% for validation.  We make sure to add in the *stratify* parameter to ensure that both our training and test sets have the same proportion of customers who did, and did not, sign up for the *delivery club* - meaning we can be more confident in our assessment of predictive performance.
+In this case, we have allocated 80% of the data for training, and the remaining 20% for validation. We make sure to add in the *stratify* parameter to ensure that both our training and test sets have the same proportion of customers who did and did not sign up for the *delivery club* - meaning we can be more confident in our assessment of predictive performance.
 
 <br>
 ```python
@@ -281,23 +278,22 @@ y = data_for_model["signup_flag"]
 
 # split out training & test sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42, stratify = y)
-
 ```
 
 <br>
 ##### Categorical Predictor Variables
 
-In our dataset, we have one categorical variable *gender* which has values of "M" for Male, "F" for Female, and "U" for Unknown.
+In our dataset, we have one categorical variable *gender*, which has values of "M" for Male, "F" for Female, and "U" for Unknown.
 
-The Logistic Regression algorithm can't deal with data in this format as it can't assign any numerical meaning to it when looking to assess the relationship between the variable and the dependent variable.
+The Logistic Regression algorithm can't deal with data in this format, as it can't assign any numerical meaning to them when looking to assess the relationship between the independent variables and the dependent variable.
 
-As *gender* doesn't have any explicit *order* to it, in other words, Male isn't higher or lower than Female and vice versa - one appropriate approach is to apply One Hot Encoding to the categorical column.
+As *gender* doesn't have any explicit *order* to it (in other words, Male isn't higher or lower than Female and vice versa), one appropriate approach is to apply **One Hot Encoding** to the categorical column.
 
-One Hot Encoding can be thought of as a way to represent categorical variables as binary vectors, in other words, a set of *new* columns for each categorical value with either a 1 or a 0 saying whether that value is true or not for that observation.  These new columns would go into our model as input variables, and the original column is discarded.
+One Hot Encoding can be thought of as a way to represent categorical variables as binary vectors - in other words, a set of *new* columns for each categorical value with either a 1 or a 0 saying whether that value is true or not for that observation. These new columns would go into our model as input variables and the original column is discarded.
 
-We also drop one of the new columns using the parameter *drop = "first"*.  We do this to avoid the *dummy variable trap* where our newly created encoded columns perfectly predict each other - and we run the risk of breaking the assumption that there is no multicollinearity, a requirement or at least an important consideration for some models, Linear Regression being one of them! Multicollinearity occurs when two or more input variables are *highly* correlated with each other, it is a scenario we attempt to avoid as in short, while it won't neccessarily affect the predictive accuracy of our model, it can make it difficult to trust the statistics around how well the model is performing, and how much each input variable is truly having.
+We also drop one of the new columns using the parameter *drop = "first"*. We do this to avoid the *dummy variable trap* where our newly created encoded columns perfectly predict each other - and we run the risk of breaking the assumption that there is no multicollinearity, a requirement or at least an important consideration for some models, Logistic Regression being one of them! Multicollinearity occurs when two or more input variables are *highly* correlated with each other, it is a scenario we attempt to avoid as in short, while it won't neccessarily affect the predictive accuracy of our model, it can make it difficult to trust the statistics around how well the model is performing and how much each input variable is truly having.
 
-In the code, we also make sure to apply *fit_transform* to the training set, but only *transform* to the test set.  This means the One Hot Encoding logic will *learn and apply* the "rules" from the training data, but only *apply* them to the test data.  This is important in order to avoid *data leakage* where the test set *learns* information about the training data, and means we can't fully trust model performance metrics!
+In the code, we also make sure to apply *fit_transform* to the training set, but only *transform* to the test set. This means the One Hot Encoding logic will *learn and apply* the "rules" from the training data, but only *apply* them to the test data. This is important in order to avoid *data leakage* where the test set *learns* information about the training data, and thus we can't fully trust model performance metrics!
 
 For ease, after we have applied One Hot Encoding, we turn our training and test objects back into Pandas Dataframes, with the column names applied.
 
@@ -308,7 +304,7 @@ For ease, after we have applied One Hot Encoding, we turn our training and test 
 categorical_vars = ["gender"]
 
 # instantiate OHE class
-one_hot_encoder = OneHotEncoder(sparse=False, drop = "first")
+one_hot_encoder = OneHotEncoder(sparse_output=False, drop = "first")
 
 # apply OHE
 X_train_encoded = one_hot_encoder.fit_transform(X_train[categorical_vars])
@@ -319,32 +315,33 @@ encoder_feature_names = one_hot_encoder.get_feature_names_out(categorical_vars)
 
 # turn objects back to pandas dataframe
 X_train_encoded = pd.DataFrame(X_train_encoded, columns = encoder_feature_names)
-X_train = pd.concat([X_train.reset_index(drop=True), X_train_encoded.reset_index(drop=True)], axis = 1)
+X_train = pd.concat([X_train.reset_index(drop = True), X_train_encoded.reset_index(drop = True)],
+                              axis = 1)
 X_train.drop(categorical_vars, axis = 1, inplace = True)
 
 X_test_encoded = pd.DataFrame(X_test_encoded, columns = encoder_feature_names)
-X_test = pd.concat([X_test.reset_index(drop=True), X_test_encoded.reset_index(drop=True)], axis = 1)
+X_test = pd.concat([X_test.reset_index(drop = True), X_test_encoded.reset_index(drop = True)],
+                              axis = 1)
 X_test.drop(categorical_vars, axis = 1, inplace = True)
-
 ```
 
 <br>
 ##### Feature Selection
 
-Feature Selection is the process used to select the input variables that are most important to your Machine Learning task.  It can be a very important addition or at least, consideration, in certain scenarios.  The potential benefits of Feature Selection are:
+Feature Selection is the process used to select the input variables that are most important to a given Machine Learning task. It can be a very important addition (or at least consideration) in certain scenarios. The potential benefits of Feature Selection are:
 
 * **Improved Model Accuracy** - eliminating noise can help true relationships stand out
-* **Lower Computational Cost** - our model becomes faster to train, and faster to make predictions
-* **Explainability** - understanding & explaining outputs for stakeholder & customers becomes much easier
+* **Lower Computational Cost** - our model becomes faster to train and faster to make predictions
+* **Explainability** - understanding & explaining outputs for stakeholders/customers becomes much easier
 
-There are many, many ways to apply Feature Selection.  These range from simple methods such as a *Correlation Matrix* showing variable relationships, to *Univariate Testing* which helps us understand statistical relationships between variables, and then to even more powerful approaches like *Recursive Feature Elimination (RFE)* which is an approach that starts with all input variables, and then iteratively removes those with the weakest relationships with the output variable.
+There are many, many ways to apply Feature Selection. These range from simple methods, such as a *Correlation Matrix* (showing variable relationships) and *Univariate Testing* (which helps us understand statistical relationships between variables), to even more powerful approaches like *Recursive Feature Elimination (RFE)*, which is an approach that starts with all input variables and then iteratively removes those with the weakest relationships with the output variable.
 
-For our task we applied a variation of Reursive Feature Elimination called *Recursive Feature Elimination With Cross Validation (RFECV)* where we split the data into many "chunks" and iteratively trains & validates models on each "chunk" seperately.  This means that each time we assess different models with different variables included, or eliminated, the algorithm also knows how accurate each of those models was.  From the suite of model scenarios that are created, the algorithm can determine which provided the best accuracy, and thus can infer the best set of input variables to use!
+For our task, we applied a variation of Recursive Feature Elimination called *Recursive Feature Elimination With Cross Validation (RFECV)* where we split the data into many "chunks" and iteratively train & validate the model on each "chunk" seperately. This means that each time we assess different models with different variables included, or eliminated, the algorithm also knows how accurate each of those models is. From the suite of model scenarios that are created, the algorithm can determine which is providing the best accuracy and thus can infer the best set of input variables to use!
 
 <br>
 ```python
 
-# instantiate RFECV & the model type to be utilised
+# instantiate RFECV & the model type to be utilized
 clf = LogisticRegression(random_state = 42, max_iter = 1000)
 feature_selector = RFECV(clf)
 
@@ -358,34 +355,31 @@ print(f"Optimal number of features: {optimal_feature_count}")
 # limit our training & test sets to only include the selected variables
 X_train = X_train.loc[:, feature_selector.get_support()]
 X_test = X_test.loc[:, feature_selector.get_support()]
-
 ```
 
 <br>
-The below code then produces a plot that visualises the cross-validated classification accuracy with each potential number of features
+The below code then produces a plot that visualizes the cross-validated classification accuracy with each potential number of features:
 
 ```python
 
-plt.style.use('seaborn-poster')
 plt.plot(range(1, len(fit.cv_results_['mean_test_score']) + 1), fit.cv_results_['mean_test_score'], marker = "o")
 plt.ylabel("Classification Accuracy")
 plt.xlabel("Number of Features")
 plt.title(f"Feature Selection using RFECV \n Optimal number of features is {optimal_feature_count} (at score of {round(max(fit.cv_results_['mean_test_score']),4)})")
 plt.tight_layout()
 plt.show()
-
 ```
 
 <br>
-This creates the below plot, which shows us that the highest cross-validated classification accuracy (0.904) is when we include seven of our original input variables.  The variable that has been dropped is *total_sales* but from the chart we can see that the difference is negligible.  However, we will continue on with the selected seven!
+This creates the below plot, which shows us that the highest cross-validated classification accuracy (0.904) is when we include seven of our original input variables. The variable that has been dropped is *total_sales* but from the chart we can see that the difference is negligible. However, we will continue on with the selected seven!
 
 <br>
-![alt text](/img/posts/log-reg-feature-selection-plot.png "Logistic Regression Feature Selection Plot")
+    ![alt text](/img/posts/log-reg-feature-selection-plot.png "Logistic Regression Feature Selection Plot")
 
 <br>
 ### Model Training <a name="logreg-model-training"></a>
 
-Instantiating and training our Logistic Regression model is done using the below code.  We use the *random_state* parameter to ensure reproducible results, meaning any refinements can be compared to past results.  We also specify *max_iter = 1000* to allow the solver more attempts at finding an optimal regression line, as the default value of 100 was not enough.
+Instantiating and training our Logistic Regression model is done using the below code. We use the *random_state* parameter to ensure reproducible results, meaning any refinements can be compared to past results. We also specify *max_iter = 1000* to allow the solver more attempts at finding an optimal regression line, as the default value of 100 is not enough.
 
 ```python
 
@@ -394,7 +388,6 @@ clf = LogisticRegression(random_state = 42, max_iter = 1000)
 
 # fit our model using our training & test sets
 clf.fit(X_train, y_train)
-
 ```
 
 <br>
@@ -402,16 +395,15 @@ clf.fit(X_train, y_train)
 
 ##### Predict On The Test Set
 
-To assess how well our model is predicting on new data - we use the trained model object (here called *clf*) and ask it to predict the *signup_flag* variable for the test set.
+To assess how well our model is predicting on new data, we use the trained model object (here called *clf*) and ask it to predict the *signup_flag* variable for the test set.
 
-In the code below we create one object to hold the binary 1/0 predictions, and another to hold the actual prediction probabilities for the positive class.
+In the code below, we create one object to hold the binary 1/0 predictions and another to hold the actual prediction probabilities for the positive class.
 
 ```python
 
 # predict on the test set
 y_pred_class = clf.predict(X_test)
 y_pred_prob = clf.predict_proba(X_test)[:,1]
-
 ```
 
 <br>
@@ -427,7 +419,7 @@ The below code creates the Confusion Matrix using the *confusion_matrix* functio
 conf_matrix = confusion_matrix(y_test, y_pred_class)
 
 # plot the confusion matrix
-plt.style.use("seaborn-poster")
+plt.style.use('seaborn-v0_8-poster')
 plt.matshow(conf_matrix, cmap = "coolwarm")
 plt.gca().xaxis.tick_bottom()
 plt.title("Confusion Matrix")
@@ -436,54 +428,51 @@ plt.xlabel("Predicted Class")
 for (i, j), corr_value in np.ndenumerate(conf_matrix):
     plt.text(j, i, corr_value, ha = "center", va = "center", fontsize = 20)
 plt.show()
-
 ```
 
 <br>
-![alt text](/img/posts/log-reg-confusion-matrix.png "Logistic Regression Confusion Matrix")
+    ![alt text](/img/posts/log-reg-confusion-matrix.png "Logistic Regression Confusion Matrix")
 
 <br>
 The aim is to have a high proportion of observations falling into the top left cell (predicted non-signup and actual non-signup) and the bottom right cell (predicted signup and actual signup).
 
-Since the proportion of signups in our data was around 30:70 we will next analyse not only Classification Accuracy, but also Precision, Recall, and F1-Score which will help us assess how well our model has performed in reality.
+Since the proportion of signups in our data was around 30:70, we will next analyze not only Classification Accuracy, but also Precision, Recall, and F1-Score, which will help us assess how well our model has performed in reality.
 
 <br>
 ##### Classification Performance Metrics
 <br>
 **Classification Accuracy**
 
-Classification Accuracy is a metric that tells us *of all predicted observations, what proportion did we correctly classify*.  This is very intuitive, but when dealing with imbalanced classes, can be misleading.  
+Classification Accuracy is a metric that tells us *of all predicted observations, what proportion did we correctly classify?*.  This is very intuitive, but when dealing with imbalanced classes, it can be misleading.  
 
-An example of this could be a rare disease. A model with a 98% Classification Accuracy on might appear like a fantastic result, but if our data contained 98% of patients *without* the disease, and 2% *with* the disease - then a 98% Classification Accuracy could be obtained simply by predicting that *no one* has the disease - which wouldn't be a great model in the real world.  Luckily, there are other metrics which can help us!
+An example of this could be a rare disease. A model with a 98% Classification Accuracy might appear like a fantastic result, but if our data contained 98% of patients *without* the disease, and 2% *with* the disease, then a 98% Classification Accuracy could be obtained simply by predicting that *no one* has the disease - which wouldn't be a great model in the real world. Luckily, there are other metrics which can help us!
 
-In this example of the rare disease, we could define Classification Accuracy as *of all predicted patients, what proportion did we correctly classify as either having the disease, or not having the disease*
+In this example of the rare disease, we could define Classification Accuracy as *of all predicted patients, what proportion did we correctly classify as either having the disease or not having the disease?*
 
 <br>
 **Precision & Recall**
 
-Precision is a metric that tells us *of all observations that were predicted as positive, how many actually were positive*
+Precision is a metric that tells us *of all observations that were predicted as positive, how many actually were positive?*
 
-Keeping with the rare disease example, Precision would tell us *of all patients we predicted to have the disease, how many actually did*
+Keeping with the rare disease example, Precision would tell us *of all patients we predicted to have the disease, how many actually did?*
 
-Recall is a metric that tells us *of all positive observations, how many did we predict as positive*
+Recall is a metric that tells us *of all positive observations, how many did we predict as positive?*
 
-Again, referring to the rare disease example, Recall would tell us *of all patients who actually had the disease, how many did we correctly predict*
+Again, referring to the rare disease example, Recall would tell us *of all patients who actually had the disease, how many did we correctly predict?*
 
-The tricky thing about Precision & Recall is that it is impossible to optimise both - it's a zero-sum game.  If you try to increase Precision, Recall decreases, and vice versa.  Sometimes however it will make more sense to try and elevate one of them, in spite of the other.  In the case of our rare-disease prediction like we've used in our example, perhaps it would be more important to optimise for Recall as we want to classify as many positive cases as possible.  In saying this however, we don't want to just classify every patient as having the disease, as that isn't a great outcome either!
+The tricky thing about Precision & Recall is that it is impossible to optimize both - it's a zero-sum game. If you try to increase Precision, Recall decreases, and vice versa. Sometimes, however, it will make more sense to try and elevate one of them, in spite of the other dropping. In the case of our rare-disease prediction example, perhaps it would be more important to optimize for Recall as we want to classify as many positive cases as possible. In saying this, however, we don't want to just classify every patient as having the disease, as that isn't a great outcome either!
 
-So - there is one more metric we will discuss & calculate, which is actually a *combination* of both...
-
-<br>
-**F1 Score**
-
-F1-Score is a metric that essentially "combines" both Precision & Recall.  Technically speaking, it is the harmonic mean of these two metrics.  A good, or high, F1-Score comes when there is a balance between Precision & Recall, rather than a disparity between them.
-
-Overall, optimising your model for F1-Score means that you'll get a model that is working well for both positive & negative classifications rather than skewed towards one or the other.  To return to the rare disease predictions, a high F1-Score would mean we've got a good balance between successfully predicting the disease when it's present, and not predicting cases where it's not present.
-
-Using all of these metrics in combination gives a really good overview of the performance of a classification model, and gives us an understanding of the different scenarios & considerations!
+So - there is one more metric we will discuss and calculate, which is actually a *combination* of both...**F1 Score**.
 
 <br>
-In the code below, we utilise in-built functionality from scikit-learn to calculate these four metrics.
+F1-Score is a metric that essentially "combines" both Precision & Recall. Technically speaking, it is the harmonic mean of these two metrics. A good, or high, F1-Score comes when there is a balance between Precision & Recall, rather than a disparity between them.
+
+Overall, optimizing your model for F1-Score means that you'll get a model that is working well for both positive & negative classifications rather than those skewed towards one or the other. To return to the rare disease predictions, a high F1-Score would mean we've got a good balance between successfully predicting the disease when it's present, and not predicting cases where it's not present.
+
+Using all of these metrics in combination gives a really good overview of the performance of a classification model, and gives us an understanding of the different scenarios and considerations!
+
+<br>
+In the code below, we utilize built-in functionality from scikit-learn to calculate these four metrics:
 
 ```python
 
@@ -498,22 +487,21 @@ recall_score(y_test, y_pred_class)
 
 # f1-score
 f1_score(y_test, y_pred_class)
-
 ```
 <br>
 Running this code gives us:
 
-* Classification Accuracy = **0.866** meaning we correctly predicted the class of 86.6% of test set observations
-* Precision = **0.784** meaning that for our *predicted* delivery club signups, we were correct 78.4% of the time
-* Recall = **0.69** meaning that of all *actual* delivery club signups, we predicted correctly 69% of the time
+* Classification Accuracy = **0.866** meaning we have correctly predicted the class of 86.6% of test set observations
+* Precision = **0.784** meaning that for our *predicted* delivery club signups, we are correct 78.4% of the time
+* Recall = **0.69** meaning that of all *actual* delivery club signups, we have predicted correctly 69% of the time
 * F1-Score = **0.734** 
 
-Since our data is *somewhat* imbalanced, looking at these metrics rather than just Classification Accuracy on it's own - is a good idea, and gives us a much better understanding of what our predictions mean!  We will use these same metrics when applying other models for this task, and can compare how they stack up.
+Since our data is *somewhat* imbalanced, looking at these metrics rather than just Classification Accuracy on its own is a good idea, and gives us a much better understanding of what our predictions mean! We will use these same metrics when applying other models for this task and can compare how they stack up.
 
 <br>
 ### Finding The Optimal Classification Threshold <a name="logreg-opt-threshold"></a>
 
-By default, most pre-built classification models & algorithms will just use a 50% probability to discern between a positive class prediction (delivery club signup) and a negative class prediction (delivery club non-signup).
+By default, most pre-built classification models and algorithms will just use a 50% probability to discern between a positive class prediction (delivery club signup) and a negative class prediction (delivery club non-signup).
 
 Just because 50% is the default threshold *does not mean* it is the best one for our task.
 
@@ -532,7 +520,6 @@ f1_scores = []
 
 # loop through each threshold - fit the model - append the results
 for threshold in thresholds:
-    
     pred_class = (y_pred_prob >= threshold) * 1
     
     precision = precision_score(y_test, pred_class, zero_division = 0)
@@ -1663,3 +1650,4 @@ While predictive accuracy was relatively high - other modelling approaches could
 We could even look to tune the hyperparameters of the Random Forest, notably regularisation parameters such as tree depth, as well as potentially training on a higher number of Decision Trees in the Random Forest.
 
 From a data point of view, further variables could be collected, and further feature engineering could be undertaken to ensure that we have as much useful information available for predicting customer loyalty
+
