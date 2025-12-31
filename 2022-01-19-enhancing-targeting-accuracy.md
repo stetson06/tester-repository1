@@ -531,7 +531,7 @@ for threshold in thresholds:
     f1 = f1_score(y_test, pred_class)
     f1_scores.append(f1)
     
-# extract the optimal f1-score (and it's index)
+# extract the optimal f1-score (and its index)
 max_f1 = max(f1_scores)
 max_f1_idx = f1_scores.index(max_f1)
 
@@ -544,7 +544,7 @@ Now we have run this, we can use the below code to plot the results!
 ```python
 
 # plot the results
-plt.style.use("seaborn-poster")
+plt.style.use("seaborn-v0_8-poster")
 plt.plot(thresholds, precision_scores, label = "Precision", linestyle = "--")
 plt.plot(thresholds, recall_scores, label = "Recall", linestyle = "--")
 plt.plot(thresholds, f1_scores, label = "F1", linewidth = 5)
@@ -554,35 +554,34 @@ plt.ylabel("Assessment Score")
 plt.legend(loc = "lower left")
 plt.tight_layout()
 plt.show()
-
 ```
 <br>
-![alt text](/img/posts/log-reg-optimal-threshold-plot.png "Logistic Regression Optimal Threshold Plot")
+    ![alt text](/img/posts/log-reg-optimal-threshold-plot.png "Logistic Regression Optimal Threshold Plot")
 
 <br>
-Along the x-axis of the above plot we have the different classification thresholds that were testing.  Along the y-axis we have the performance score for each of our three metrics.  As per the legend, we have Precision as a blue dotted line, Recall as an orange dotted line, and F1-Score as a thick green line.  You can see the interesting "zero-sum" relationship between Precision & Recall *and* you can see that the point where Precision & Recall meet is where F1-Score is maximised.
+Along the x-axis of the above plot, we have the different classification thresholds that we're testing. Along the y-axis, we have the performance score for each of our three metrics. As per the legend, we have Precision as a blue dotted line, Recall as an orange dotted line, and F1-Score as a thick green line. You can see the interesting "zero-sum" relationship between Precision & Recall *and* you can see that the point where Precision and Recall meet is where F1-Score is maximized.
 
-As you can see at the top of the plot, the optimal F1-Score for this model 0.78 and this is obtained at a classification threshold of 0.44.  This is higher than the F1-Score of 0.734 that we achieved at the default classification threshold of 0.50!
+As you can see at the top of the plot, the optimal F1-Score for this model is 0.78 and this is obtained at a classification threshold of 0.44. This is higher than the F1-Score of 0.734 that we achieved at the default classification threshold of 0.50!
 
 ___
 <br>
 # Decision Tree <a name="clftree-title"></a>
 
-We will again utlise the scikit-learn library within Python to model our data using a Decision Tree. The code sections below are broken up into 6 key sections:
+We will again utilize the scikit-learn library within Python to model our data using a Decision Tree. The code sections below are broken up into 6 key sections:
 
 * Data Import
 * Data Preprocessing
 * Model Training
 * Performance Assessment
-* Tree Visualisation
-* Decision Tree Regularisation
+* Tree Visualization
+* Decision Tree Regularization
 
 <br>
 ### Data Import <a name="clftree-import"></a>
 
-Since we saved our modelling data as a pickle file, we import it.  We ensure we remove the id column, and we also ensure our data is shuffled.
+Since we saved our modelling data as a pickle file, we import it. We ensure we remove the id column and we also ensure our data is shuffled.
 
-Just like we did for Logistic Regression - our code also investigates the class balance of our dependent variable.
+Just like we did for Logistic Regression, our code also investigates the class balance of our dependent variable.
 
 ```python
 
@@ -608,12 +607,11 @@ data_for_model = shuffle(data_for_model, random_state = 42)
 
 # assess class balance of dependent variable
 data_for_model["signup_flag"].value_counts(normalize = True)
-
 ```
 <br>
 ### Data Preprocessing <a name="clftree-preprocessing"></a>
 
-While Logistic Regression is susceptible to the effects of outliers, and highly correlated input variables - Decision Trees are not, so the required preprocessing here is lighter. We still however will put in place logic for:
+While Logistic Regression is susceptible to the effects of outliers and highly correlated input variables, Decision Trees are not, so the required preprocessing here is lighter. We still however will put in place logic for:
 
 * Missing values in the data
 * Encoding categorical variables to numeric form
@@ -621,23 +619,21 @@ While Logistic Regression is susceptible to the effects of outliers, and highly 
 <br>
 ##### Missing Values
 
-The number of missing values in the data was extremely low, so instead of applying any imputation (i.e. mean, most common value) we will just remove those rows
+The number of missing values in the data is extremely low, so instead of applying any imputation (i.e. mean, most common value) we will just remove those rows.
 
 ```python
 
 # remove rows where values are missing
 data_for_model.isna().sum()
 data_for_model.dropna(how = "any", inplace = True)
-
 ```
 
 <br>
 ##### Split Out Data For Modelling
 
-In exactly the same way we did for Logistic Regression, in the next code block we do two things, we firstly split our data into an **X** object which contains only the predictor variables, and a **y** object that contains only our dependent variable.
+In exactly the same way we did for Logistic Regression, in the next code block we do two things: 1) split our data into an **X** object which contains only the predictor variables and a **y** object that contains only our dependent variable; and 2) we split our data into training and test sets to ensure we can fairly validate the accuracy of the predictions on data not used in training.
 
-Once we have done this, we split our data into training and test sets to ensure we can fairly validate the accuracy of the predictions on data that was not used in training.  In this case, we have allocated 80% of the data for training, and the remaining 20% for validation.  Again, we make sure to add in the *stratify* parameter to ensure that both our training and test sets have the same proportion of customers who did, and did not, sign up for the *delivery club* - meaning we can be more confident in our assessment of predictive performance.
-
+In this case, we have allocated 80% of the data for training and the remaining 20% for validation.  Again, we make sure to add in the *stratify* parameter to ensure that both our training and test sets have the same proportion of customers who did and did not sign up for the *delivery club* - meaning we can be more confident in our assessment of predictive performance.
 
 <br>
 ```python
@@ -1650,4 +1646,5 @@ While predictive accuracy was relatively high - other modelling approaches could
 We could even look to tune the hyperparameters of the Random Forest, notably regularisation parameters such as tree depth, as well as potentially training on a higher number of Decision Trees in the Random Forest.
 
 From a data point of view, further variables could be collected, and further feature engineering could be undertaken to ensure that we have as much useful information available for predicting customer loyalty
+
 
