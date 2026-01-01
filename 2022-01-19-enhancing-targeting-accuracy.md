@@ -654,7 +654,7 @@ In our dataset, we have one categorical variable *gender* which has values of "M
 
 Just like the Logisitc Regression algorithm, the Decision Tree cannot deal with data in this format as it can't assign any numerical meaning to it when looking to assess the relationship between the variable and the dependent variable.
 
-As *gender* doesn't have any explicit *order* to it, in other words, Male isn't higher or lower than Female and vice versa - we would again apply One Hot Encoding to the categorical column.
+As *gender* doesn't have any explicit *order* to it (in other words, Male isn't higher or lower than Female and vice versa), we would again apply One Hot Encoding to the categorical column.
 
 <br>
 ```python
@@ -663,7 +663,7 @@ As *gender* doesn't have any explicit *order* to it, in other words, Male isn't 
 categorical_vars = ["gender"]
 
 # instantiate OHE class
-one_hot_encoder = OneHotEncoder(sparse=False, drop = "first")
+one_hot_encoder = OneHotEncoder(sparse_output = False, drop = "first")
 
 # apply OHE
 X_train_encoded = one_hot_encoder.fit_transform(X_train[categorical_vars])
@@ -674,19 +674,20 @@ encoder_feature_names = one_hot_encoder.get_feature_names_out(categorical_vars)
 
 # turn objects back to pandas dataframe
 X_train_encoded = pd.DataFrame(X_train_encoded, columns = encoder_feature_names)
-X_train = pd.concat([X_train.reset_index(drop=True), X_train_encoded.reset_index(drop=True)], axis = 1)
+X_train = pd.concat([X_train.reset_index(drop = True), X_train_encoded.reset_index(drop = True)],
+                              axis = 1)
 X_train.drop(categorical_vars, axis = 1, inplace = True)
 
 X_test_encoded = pd.DataFrame(X_test_encoded, columns = encoder_feature_names)
-X_test = pd.concat([X_test.reset_index(drop=True), X_test_encoded.reset_index(drop=True)], axis = 1)
+X_test = pd.concat([X_test.reset_index(drop = True), X_test_encoded.reset_index(drop = True)],
+                              axis = 1)
 X_test.drop(categorical_vars, axis = 1, inplace = True)
-
 ```
 
 <br>
 ### Model Training <a name="clftree-model-training"></a>
 
-Instantiating and training our Decision Tree model is done using the below code.  We use the *random_state* parameter to ensure we get reproducible results, and this helps us understand any improvements in performance with changes to model hyperparameters.
+Instantiating and training our Decision Tree model is done using the below code. We use the *random_state* parameter to ensure we get reproducible results, and this helps us understand any improvements in performance with changes to model hyperparameters.
 
 ```python
 
@@ -695,7 +696,6 @@ clf = DecisionTreeClassifier(random_state = 42, max_depth = 5)
 
 # fit our model using our training & test sets
 clf.fit(X_train, y_train)
-
 ```
 
 <br>
@@ -705,22 +705,21 @@ clf.fit(X_train, y_train)
 
 Just like we did with Logistic Regression, to assess how well our model is predicting on new data - we use the trained model object (here called *clf*) and ask it to predict the *signup_flag* variable for the test set.
 
-In the code below we create one object to hold the binary 1/0 predictions, and another to hold the actual prediction probabilities for the positive class.
+In the code below, we create one object to hold the binary 1/0 predictions and another to hold the actual prediction probabilities for the positive class.
 
 ```python
 
 # predict on the test set
 y_pred_class = clf.predict(X_test)
 y_pred_prob = clf.predict_proba(X_test)[:,1]
-
 ```
 
 <br>
 ##### Confusion Matrix
 
-As we discussed in the above section applying Logistic Regression - a Confusion Matrix provides us a visual way to understand how our predictions match up against the actual values for those test set observations.
+As discussed in the above section applying Logistic Regression, a Confusion Matrix provides us a visual way to understand how our predictions match up against the actual values for those test set observations.
 
-The below code creates the Confusion Matrix using the *confusion_matrix* functionality from within scikit-learn and then plots it using matplotlib.
+The below code block creates the Confusion Matrix using the *confusion_matrix* functionality from within scikit-learn and then plots it using matplotlib.
 
 ```python
 
@@ -728,7 +727,7 @@ The below code creates the Confusion Matrix using the *confusion_matrix* functio
 conf_matrix = confusion_matrix(y_test, y_pred_class)
 
 # plot the confusion matrix
-plt.style.use("seaborn-poster")
+plt.style.use("seaborn-v0_8-poster")
 plt.matshow(conf_matrix, cmap = "coolwarm")
 plt.gca().xaxis.tick_bottom()
 plt.title("Confusion Matrix")
@@ -737,25 +736,24 @@ plt.xlabel("Predicted Class")
 for (i, j), corr_value in np.ndenumerate(conf_matrix):
     plt.text(j, i, corr_value, ha = "center", va = "center", fontsize = 20)
 plt.show()
-
 ```
 
 <br>
-![alt text](/img/posts/clf-tree-confusion-matrix.png "Decision Tree Confusion Matrix")
+    ![alt text](/img/posts/clf-tree-confusion-matrix.png "Decision Tree Confusion Matrix")
 
 <br>
 The aim is to have a high proportion of observations falling into the top left cell (predicted non-signup and actual non-signup) and the bottom right cell (predicted signup and actual signup).
 
-Since the proportion of signups in our data was around 30:70 we will again analyse not only Classification Accuracy, but also Precision, Recall, and F1-Score as they will help us assess how well our model has performed from different points of view.
+Since the proportion of signups in our data is around 30:70, we will again analyze not only Classification Accuracy, but also Precision, Recall, and F1-Score as they will help us assess how well our model is performing from different points of view.
 
 <br>
 ##### Classification Performance Metrics
 <br>
 **Accuracy, Precision, Recall, F1-Score**
 
-For details on these performance metrics, please see the above section on Logistic Regression.  Using all four of these metrics in combination gives a really good overview of the performance of a classification model, and gives us an understanding of the different scenarios & considerations!
+For details on these performance metrics, please see the above section on Logistic Regression. Using all four of these metrics in combination gives a really good overview of the performance of a classification model, and gives us an understanding of the different scenarios and considerations!
 
-In the code below, we utilise in-built functionality from scikit-learn to calculate these four metrics.
+In the code below, we utilize built-in functionality from scikit-learn to calculate these four metrics:
 
 ```python
 
@@ -770,7 +768,6 @@ recall_score(y_test, y_pred_class)
 
 # f1-score
 f1_score(y_test, y_pred_class)
-
 ```
 <br>
 Running this code gives us:
@@ -780,13 +777,12 @@ Running this code gives us:
 * Recall = **0.885** meaning that of all *actual* delivery club signups, we predicted correctly 88.5% of the time
 * F1-Score = **0.885**
 
-These are all higher than what we saw when applying Logistic Regression, even after we had optimised the classification threshold!
-
+These are all higher than what we saw when applying Logistic Regression, even after we had optimized the classification threshold!
 
 <br>
-### Visualise Our Decision Tree <a name="clftree-visualise"></a>
+### Visualize Our Decision Tree <a name="clftree-visualise"></a>
 
-To see the decisions that have been made in the tree, we can use the plot_tree functionality that we imported from scikit-learn.  To do this, we use the below code:
+To see the decisions that have been made in the tree, we can use the *plot_tree* functionality that we imported from scikit-learn. To do this, we use the below code:
 
 <br>
 ```python
@@ -794,51 +790,50 @@ To see the decisions that have been made in the tree, we can use the plot_tree f
 # plot the nodes of the decision tree
 plt.figure(figsize=(25,15))
 tree = plot_tree(clf,
-                 feature_names = X.columns,
+                 feature_names = list(X.columns),
                  filled = True,
                  rounded = True,
                  fontsize = 16)
-
 ```
 <br>
 That code gives us the below plot:
 
 <br>
-![alt text](/img/posts/clf-tree-nodes-plot.png "Decision Tree Max Depth Plot")
+    ![alt text](/img/posts/clf-tree-nodes-plot.png "Decision Tree Max Depth Plot")
 
 <br>
-This is a very powerful visual, and one that can be shown to stakeholders in the business to ensure they understand exactly what is driving the predictions.
+This is a very powerful visual and one that can be shown to stakeholders to ensure they understand exactly what is driving the predictions.
 
 One interesting thing to note is that the *very first split* appears to be using the variable *distance from store* so it would seem that this is a very important variable when it comes to predicting signups to the delivery club!
 
 <br>
-### Decision Tree Regularisation <a name="clftree-model-regularisation"></a>
+### Decision Tree Regularization <a name="clftree-model-regularization"></a>
 
-Decision Tree's can be prone to over-fitting, in other words, without any limits on their splitting, they will end up learning the training data perfectly.  We would much prefer our model to have a more *generalised* set of rules, as this will be more robust & reliable when making predictions on *new* data.
+Decision Trees can be prone to over-fitting - in other words, without any limits on their splitting, they will end up learning the training data perfectly. We would much prefer our model to have a more *generalized* set of rules, as this will be more robust and reliable when making predictions on *new* data.
 
-One effective method of avoiding this over-fitting, is to apply a *max depth* to the Decision Tree, meaning we only allow it to split the data a certain number of times before it is required to stop.
+One effective method of avoiding this over-fitting is to apply a *max depth* to the Decision Tree, meaning we only allow it to split the data a certain number of times before it is required to stop.
 
-We initially trained our model with a placeholder depth of 5, but unfortunately, we don't necessarily know the *optimal* number for this.  Below we will loop over a variety of values and assess which gives us the best predictive performance!
+We initially trained our model with a placeholder depth of 5, but unfortunately we don't necessarily know the *optimal* number for this. Below, we loop over a variety of values and assess which gives us the best predictive performance!
 
 <br>
 ```python
 
 # finding the best max_depth
 
-# set up range for search, and empty list to append accuracy scores to
+# set up range for search and empty list to append accuracy scores to
 max_depth_list = list(range(1,15))
 accuracy_scores = []
 
 # loop through each possible depth, train and validate model, append test set f1-score
+
 for depth in max_depth_list:
-    
     clf = DecisionTreeClassifier(max_depth = depth, random_state = 42)
-    clf.fit(X_train,y_train)
+    clf.fit(X_train, y_train)
     y_pred = clf.predict(X_test)
-    accuracy = f1_score(y_test,y_pred)
+    accuracy = f1_score(y_test, y_pred)
     accuracy_scores.append(accuracy)
     
-# store max accuracy, and optimal depth    
+# store max accuracy and optimal depth    
 max_accuracy = max(accuracy_scores)
 max_accuracy_idx = accuracy_scores.index(max_accuracy)
 optimal_depth = max_depth_list[max_accuracy_idx]
@@ -851,22 +846,21 @@ plt.xlabel("Max Depth of Decision Tree")
 plt.ylabel("Accuracy (F1 Score)")
 plt.tight_layout()
 plt.show()
-
 ```
 <br>
-That code gives us the below plot - which visualises the results!
+That code gives us the below plot - which visualizes the results!
 
 <br>
-![alt text](/img/posts/clf-tree-max-depth-plot.png "Decision Tree Max Depth Plot")
+    ![alt text](/img/posts/clf-tree-max-depth-plot.png "Decision Tree Max Depth Plot")
 
 <br>
-In the plot we can see that the *maximum* F1-Score on the test set is found when applying a *max_depth* value of 9 which takes our F1-Score up to 0.925
+In the plot, we can see that the *maximum* F1-Score on the test set is found when applying a *max_depth* value of 9, which takes our F1-Score up to 0.9245.
 
 ___
 <br>
 # Random Forest <a name="rf-title"></a>
 
-We will again utlise the scikit-learn library within Python to model our data using a Random Forest. The code sections below are broken up into 4 key sections:
+We will again utilize the scikit-learn library within Python to model our data using a Random Forest. The code sections below are broken up into 4 key sections:
 
 * Data Import
 * Data Preprocessing
@@ -876,9 +870,9 @@ We will again utlise the scikit-learn library within Python to model our data us
 <br>
 ### Data Import <a name="rf-import"></a>
 
-Again, since we saved our modelling data as a pickle file, we import it.  We ensure we remove the id column, and we also ensure our data is shuffled.
+Again, since we saved our modelling data as a pickle file, we import it. We ensure we remove the id column and we also ensure our data is shuffled.
 
-As this is the exact same process we ran for both Logistic Regression & the Decision Tree - our code also investigates the class balance of our dependent variable
+As this is the exact same process we ran for both Logistic Regression and the Decision Tree, our code also investigates the class balance of our dependent variable.
 
 ```python
 
@@ -1646,5 +1640,6 @@ While predictive accuracy was relatively high - other modelling approaches could
 We could even look to tune the hyperparameters of the Random Forest, notably regularisation parameters such as tree depth, as well as potentially training on a higher number of Decision Trees in the Random Forest.
 
 From a data point of view, further variables could be collected, and further feature engineering could be undertaken to ensure that we have as much useful information available for predicting customer loyalty
+
 
 
