@@ -352,13 +352,11 @@ An example of how this might work would be to test a hypothesis around New Zeala
 The code below uses a string function to pull back all rows in the DataFrame where *product1* contains the words "New Zealand"
 
 ```python
-
 # search based upon text
 apriori_rules_df[apriori_rules_df["product1"].str.contains("New Zealand")]
-
 ```
 <br>
-The results of this search, in order of descending Lift are as follows:
+The results of this search, in order of descending Lift, are as follows:
 <br>
 <br>
 
@@ -381,17 +379,16 @@ The results of this search, in order of descending Lift are as follows:
 | New Zealand Red | Australia White | 0.007289038 | 0.371428571 | 3.215742025 |
 
 <br>
-There appears to be *some* relationship between New Zealand wines and other New Zealand wines, but what is also interesting is that New Zealand wines seem to be more associated with French & South American wines than they are with Australian Wines.
+There appears to be *some* relationship between New Zealand wines and other New Zealand wines, but what is also interesting is that New Zealand wines seem to be more associated with French and South American wines than they are with Australian wines.
 
-New Zealand & Australia are often grouped together, but in terms of wine this wouldn't make sense - perhaps because of the difference climates the wines are very different and thus it wouldn't make sense to group wines by geographical proximity, but by preference instead.  This is only a hypothesis for now - we will need to take this back to the client and get their category experts to help us interpret it!
+New Zealand and Australia are often grouped together, but in terms of wine, this wouldn't make sense - perhaps because of the different climates, the wines are very different and thus it wouldn't make sense to group them by geographical proximity, but by preference instead. This is only a hypothesis for now - we will need to take this back to the client and get their category experts to help us interpret it!
 
 ___
 <br>
 # Growth & Next Steps <a name="growth-next-steps"></a>
 
-As this was first & foremost an exploratory project, we will take back the results to the client Category Managers & discuss the results, our views on how these insights can be actioned best, and any considerations that need to be taken into account when interpreting.
+As this was first and foremost an exploratory project, we will take back the results to the client Category Managers and discuss the results, our views on how these insights can be actioned best, and any considerations that need to be taken into account when interpreting.
 
 From there we will recommend applying this same logic to all other categories, as well as potentially across the full-product range.
 
-
-We will also propose the build of the "Keyword Search Engine" which will help Category Managers extract and utilise the insights held within the data.
+We will also propose the build of the "Keyword Search Engine" which will help Category Managers extract and utilize the insights held within the data.
