@@ -207,7 +207,7 @@ Another reason for choosing Normalization over Standardization is that our scale
 
 In our specific task here, we are using percentages, so our values are *already* spread between 0 and 1. We will still apply normalization for the following common reason: One of the product areas might make up a large proportion of customer sales and this may end up dominating the clustering space. If we normalize all of our variables, the data will be spread proportionately between 0 and 1, even for product areas with smaller volumes!
 
-The below code uses the built-in MinMaxScaler functionality from scikit-learn to apply Normalization to all of our variables. The reason we create a new object (here called "data_for_clustering_scaled") is because we want to use the scaled data for clustering, but when profiling the clusters later on, we may want to use the actual percentages as this may make more intuitive business sense, so it's good to have both options available!
+The below code uses the built-in MinMaxScaler functionality from scikit-learn to apply Normalization to all of our variables. The reason we create a new object (here called "data_for_clustering_scaled"), vice writing over the baseline datafrae object ("data_for_clustering"), is because we want to use the scaled data for clustering, but when profiling the clusters later on, we may want to use the actual percentages in the baseline object, as this may make more intuitive business sense. So it's good to have both options available!
 
 ```python
 # create our scaler object
@@ -220,20 +220,19 @@ data_for_clustering_scaled = pd.DataFrame(scale_norm.fit_transform(data_for_clus
 <br>
 ### Finding A Good Value For k <a name="kmeans-k-value"></a>
 
-At this point here, our data is ready to be fed into the k-means clustering algorithm.  Before that however, we want to understand what number of clusters we want the data split into.
+At this point here, our data is ready to be fed into the k-means clustering algorithm. Before that however, we want to understand "k" - number of clusters into which the data should be split.
 
-In the world of unsupervised learning, there is no *right or wrong* value for this - it really depends on the data you are dealing with, as well as the unique scenario you're utilising the algorithm for.  From our client, having a very high number of clusters might not be appropriate as it would be too hard for the business to understand the nuance of each in a way where they can apply the right strategies.
+In the world of unsupervised learning, there is no *right or wrong* value for this - it really depends on the data you are dealing with as well as the unique scenario for which you're utilizing the algorithm. For our client, having a very high number of clusters might not be appropriate, as it would be too hard to understand the nuance of each to apply the right strategies.
 
-Finding the "right" value for k, can feel more like art than science, but there are some data driven approaches that can help us!  
+Finding the "right" value for k, can feel more like art than science, but there are some data-driven approaches that can help us!  
 
-The approach we will utilise here is known as *Within Cluster Sum of Squares (WCSS)* which measures the sum of the squared euclidean distances that data points lie from their closest centroid.  WCSS can help us understand the point where adding *more clusters* provides little extra benefit in terms of separating our data.
+The approach we will utilize here is known as *Within Cluster Sum of Squares (WCSS)*, which measures the sum of the squared Euclidean distances that data points lie from their closest centroid. WCSS can help us understand the point where adding *more clusters* provides little extra benefit in terms of separating our data.
 
-By default, the k-means algorithm within scikit-learn will use k = 8 meaning that it will look to split the data into eight distinct clusters.  We want to find a better value that fits our data, and our task!
+By default, the k-means algorithm within scikit-learn will use k = 8, meaning that it will look to split the data into eight distinct clusters. We want to find a better value that fits our data and our task!
 
-In the code below we will test multiple values for k, and plot how this WCSS metric changes.  As we increase the value for k (in other words, as we increase the number or centroids or clusters) the WCSS value will always decrease.  However, these decreases will get smaller and smaller each time we add another centroid and we are looking for a point where this decrease is quite prominent *before* this point of diminishing returns.
+In the code below, we will test multiple values for k and plot how this WCSS metric changes. As we increase the value for k (in other words, as we increase the number or centroids or clusters), the WCSS value will always decrease. However, these decreases will get smaller and smaller each time we add another centroid and we are looking for a point where this decrease is quite prominent *before* this point of diminishing returns.
 
 ```python
-
 # set up range for search, and empty list to append wcss scores to
 k_values = list(range(1,10))
 wcss_list = []
@@ -251,30 +250,29 @@ plt.xlabel("k")
 plt.ylabel("WCSS Score")
 plt.tight_layout()
 plt.show()
-
 ```
 <br>
-That code gives us the below plot - which visualises our results!
+Interestingly, Scikit-Learn refers to the WCSS Score as "inertia," an allusion to the concept in physics that holds that for any particle, its inertia is determined by its distance from an axis of rotation. If we were to imagine each data point being a particle and each centroid being an axis of rotation, we can easily see the reason why this analogy is used! 
+
+The last portion of the code block above gives us the below plot, which visualizes our results!
 
 <br>
-![alt text](/img/posts/kmeans-optimal-k-value-plot.png "K-Means Optimal k Value Plot")
+    ![alt text](/img/posts/kmeans-optimal-k-value-plot.png "K-Means Optimal k Value Plot")
 
 <br>
-Based upon the shape of the above plot - there does appear to be an elbow at k = 3.  Prior to that we see a significant drop in the WCSS score, but following the decreases are much smaller, meaning this could be a point that suggests adding *more clusters* will provide little extra benefit in terms of separating our data.  A small number of clusters can be beneficial when considering how easy it is for the business to focus on, and understand, each - so we will continue on, and fit our k-means clustering solution with k = 3.
+Based on the shape of the above plot, there does appear to be an "elbow" at k = 3. Prior to this, we see a significant drop in the WCSS score, but following it the decreases are much smaller - meaning this could be a point that suggests adding *more clusters* will provide little extra benefit in terms of separating our data. A small number of clusters can be beneficial when considering how easy it is for the business to focus on and understand - so we will continue on and fit our k-means clustering solution with k = 3. For the reason described above, using WCSS scores for optimal k determination is often called the "elbow method."
 
 <br>
 ### Model Fitting <a name="kmeans-model-fitting"></a>
 
-The below code will instantiate our k-means object using a value for k equal to 3.  We then fit this object to our scaled dataset to separate our data into three distinct segments or clusters.
+The below code will instantiate our k-means object using a value of k = 3. We then fit this object to our scaled dataset to separate our data into three distinct segments or clusters.
 
 ```python
-
 # instantiate our k-means object
 kmeans = KMeans(n_clusters = 3, random_state = 42)
 
 # fit to our data
 kmeans.fit(data_for_clustering_scaled)
-
 ```
 
 <br>
@@ -282,31 +280,27 @@ kmeans.fit(data_for_clustering_scaled)
 
 With the k-means algorithm fitted to our data, we can now append those clusters to our original dataset, meaning that each customer will be tagged with the cluster number that they most closely fit into based upon their sales data over each product area.
 
-In the code below we tag this cluster number onto our original dataframe.
+In the code below, we tag this cluster number onto our original dataframe.
 
 ```python
-
 # add cluster labels to our original data
 data_for_clustering["cluster"] = kmeans.labels_
-
 ```
 
 <br>
 ### Cluster Profiling <a name="kmeans-cluster-profiling"></a>
 
-Once we have our data separated into distinct clusters, our client needs to understand *what is is* that is driving the separation.  This means the business can understand the customers within each, and the behaviours that make them unique.
+Once we have our data separated into distinct clusters, our client needs to understand *what it is* that is driving the separation and thus understand the customers within each cluster and the behaviors that make them unique. This information will enable the business to determine appropriate strategies, which is where the business value from our data science work resides.
 
 <br>
 ##### Cluster Sizes
 
-In the below code we firstly assess the number of customers that fall into each cluster.
+In the below code, we first assess the number of customers that fall into each cluster.
 
 <br>
 ```python
-
 # check cluster sizes
 data_for_clustering["cluster"].value_counts(normalize=True)
-
 ```
 <br>
 
@@ -316,19 +310,17 @@ Running that code shows us that the three clusters are different in size, with t
 * Cluster 2: **14.6%** of customers
 * Cluster 1: **11.8%** of customers
 
-Based on these results, it does appear we do have a skew toward Cluster 0 with Cluster 1 & Cluster 2 being proportionally smaller.  This isn't right or wrong, it is simply showing up pockets of the customer base that are exhibiting different behaviours - and this is *exactly* what we want.
+Based on these results, it appears we have a significant skew toward Cluster 0 with Clusters 1 and 2 being proportionally smaller. This isn't right or wrong, it is simply showing up pockets of the customer base that are exhibiting different behaviors - and this is *exactly* what we want.
 
 <br>
 ##### Cluster Attributes
 
-To understand what these different behaviours or characteristics are, we can look to analyse the attributes of each cluster, in terms of the variables we fed into the k-means algorithm.
+To understand what these different behaviors or characteristics are, we analyze the attributes of each cluster in terms of the variables we fed into the k-means algorithm.
 
 <br>
 ```python
-
 # profile clusters (mean % sales for each product area)
 cluster_summary = data_for_clustering.groupby("cluster")[["Dairy","Fruit","Meat","Vegetables"]].mean().reset_index()
-
 ```
 <br>
 That code results in the following table...
@@ -346,19 +338,18 @@ ___
 <br>
 # Application <a name="kmeans-application"></a>
 
-Even those this is a simple solution, based upon high level product areas it will help leaders in the business, and category managers gain a clearer understanding of the customer base.
+Even though this is a simple solution, based upon high level product areas, it will help leaders in the business and category managers gain a clearer understanding of their customer base.
 
-Tracking these clusters over time would allow the client to more quickly react to dietary trends, and adjust their messaging and inventory accordingly.
+Tracking these clusters over time would allow the client to more quickly react to dietary trends and adjust their messaging and inventory accordingly.
 
-Based upon these clusters, the client will be able to target customers more accurately - promoting products & discounts to customers that are truly relevant to them - overall enabling a more customer focused communication strategy.
+Based upon these clusters, the client will be able to target customers more accurately - promoting products and discounts to customers that are truly relevant to them. In general, this analysis would enable overall a more tailored, customer-focused communication strategy.
 
 ___
 <br>
 # Growth & Next Steps <a name="growth-next-steps"></a>
 
-It would be interesting to run this clustering/segmentation at a lower level of product areas, so rather than just the four areas of Meat, Dairy, Fruit, Vegetables - clustering spend across the sub-categories *below* those categories.  This would mean we could create more specific clusters, and get an even more granular understanding of dietary preferences within the customer base.
+It would be interesting to run this clustering/segmentation analysis at a lower level of product areas. So rather than just the four areas of Meat, Dairy, Fruit, and Vegetables, we would seek to cluster spending across the sub-categories *below* those main categories. This would mean we could create more specific clusters and get an even more granular understanding of dietary preferences within the customer base.
 
-Here we've just focused on variables that are linked directly to sales - it could be interesting to also include customer metrics such as distance to store, gender etc to give a even more well-rounded customer segmentation.
+Here we've just focused on variables that are linked directly to sales - it could be interesting to also include customer metrics such as distance to store, gender, etc., to give a even more well-rounded customer segmentation.
 
-
-It would be useful to test other clustering approaches such as hierarchical clustering or DBSCAN to compare the results.
+It would also be useful to test other clustering approaches, such as hierarchical clustering or DBSCAN to compare the results.
